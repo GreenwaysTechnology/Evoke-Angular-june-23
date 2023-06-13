@@ -1,10 +1,18 @@
-//const 
+class Employee {
+    id: number;
+    firstName: string;
+    lastName: string;
+    status: boolean;
+    //add constructor , add constructor args
+    constructor(id: number = 0, firstName: string = '', lastName: string = '', status: boolean = false) {
+        this.id = id;
+        this.firstName = firstName
+        this.lastName = lastName
+        this.status = status
+    }
+}
 
-let a =10;
-console.log(`a ${a}`)
-a=90
-console.log(`a ${a}`)
-const b =90
-console.log(`b ${b}`)
-//src/index.ts:9:1 - error TS2588: Cannot assign to 'b' because it is a constant.
-//b=100
+
+let employee = new Employee(1, 'Subramanian', 'Murugan', true);
+console.log(employee)
+console.log(employee.id, employee.firstName, employee.lastName, employee.status)

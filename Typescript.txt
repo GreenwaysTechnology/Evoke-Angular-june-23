@@ -559,6 +559,313 @@ console.log(`b ${b}`)
 //src/index.ts:9:1 - error TS2588: Cannot assign to 'b' because it is a constant.
 //b=100
 .....................................................................................
+			 functions
+.....................................................................................
+
+What is function?
+   function is going to encapsulate the code/logic
+
+How to declare function , and how invoke?
+//function declaration
+function sayHello(){
+    //logic
+   console.log('Hello')   
+}
+//function invocation
+sayHello()
+
+function args and parameters
+
+without explicit types:
+//function args and parameters
+
+//here a and b are variables its type is implicit
+//the type of variables are understood based on values we pass
+function add(a, b) {
+    //biz logic
+    let c = a + b 
+    console.log(`Add : ${c}`)
+}
+//invoke function and pass values
+add(10,10)
+//add()
+add("abc",13)
+
+How to restric a and b type?
+function add(a:number, b:number) {
+    //biz logic
+    let c = a + b 
+    console.log(`Add : ${c}`)
+}
+//invoke function and pass values
+add(10,10)
+//add()
+// add("fdsfdsf",13)
+
+Default args:
+..............
+ if you dont pass parameter(values),the function initalizes the default values
+
+//default args
+function add(a: number = 0, b: number = 0) {
+    let c = a + b
+    console.log(`c ${c}`)
+}
+add(10, 10)
+add();
+
+Optional args:
+ This is ts feature, you can skip passing values but there will not be any default values
+
+//default args
+function add(a: number = 0, b: number = 0) {
+    let c = a + b
+    console.log(`c ${c}`)
+}
+add(10, 10)
+add();
+
+//optional args a?
+function multiply(a?: number, b?: number) {
+    let c = a * b
+    if (isNaN(c)) {
+        console.log('Kindly provide numbers as parameter')
+    } else {
+        console.log(`Multiply Result ${c}`)
+    }
+}
+multiply(10, 10)
+multiply()
+
+
+function divide(a?: number, b?: number) {
+    let c = a / b
+    console.log(`divide Result ${c}`)
+}
+//parameters are based on positions
+divide(undefined, 10)
+divide(null, 10)
+divide(10)
+
+function sum(a: number = 0, b?: number) {
+    let c = a * b
+    console.log(`Sum Result ${c}`)
+}
+sum(undefined, 10)
+
+function calculate(a: number, b: number, c: number) {
+
+}
+calculate(20,10,8)
+....................................................................................
+Return values and Return Type:
+
+function sum(a: number = 0, b: number = 0): number {
+    return a * b
+}
+console.log(sum(10, 10))
+
+if function does not return any value
+   you can void type
+
+function sum(a: number = 0, b: number = 0): number {
+    return a * b
+}
+console.log(sum(10, 10))
+
+function sayHello(): void {
+    console.log('Function without any type')
+}
+sayHello()
+....................................................................................
+			function as literal : function as value
+....................................................................................
+
+Since function is value, it can be assigned to a variable.
+
+let        a =     10
+ |         |       |
+keyword variable  literal(value)
+
+//function as literal
+
+//anonmous function: function without name
+let hello = function () {
+   //logic
+   console.log('Hello')
+}
+//the variable holding function literal can be used to invoke that function 
+hello()
+
+//args and parameters and return in anonmous function
+let sum = function (a: number = 0, b: number = 0): number {
+    return a * b
+}
+console.log(sum(10, 10))
+....................................................................................
+		 Arrow functions: es 6 version of anonmous functions
+....................................................................................
+
+Objective:
+ =>To simple and readable anonmous functions.
+
+//arrow functions
+
+//ES 5 style of anonmous function
+let hello = function () {
+    //logic
+    console.log('Hello')
+}
+//ES 6 style of writing anonmous functions : arrow function
+
+let hai = () => {
+    console.log('hai')
+}
+hai()
+//if function has only one line of logic, then you can remove {}
+hai = () => console.log('hai')
+hai()
+//args and parameters
+
+let sum = (a: number = 0, b: number = 0): number => {
+    let c = a + b
+    return c;
+}
+console.log(sum(12, 89))
+
+sum = (a: number = 0, b: number = 0): number => {
+    return a + b
+}
+console.log(sum(12, 89))
+
+//if function has only return statement, we can remove {} and return statement too.
+sum = (a: number = 0, b: number = 0): number => a + b
+console.log(sum(12, 89))
+console.log(sum)
+...................................................................................
+			Advanced Types
+...................................................................................
+Union type:
+
+  A variable can have multiple types
+
+//union type
+//id now can take either string or number 
+let id: number | string
+id = 1
+id = "abc"
+//id=true
+
+//union type and predefined constant values
+
+let gender: "Male" | "Female" | "Third"
+
+gender = "Male"
+gender = "Female"
+//gender = 2
+
+let jobStatus: "Open" | "Pending" | "Closed" | "Wait List"
+
+jobStatus = "Pending"
+//How to pass parameters with union type
+
+let mode = (varient: "Dark" | "Light") => {
+    console.log(varient)
+}
+mode("Light")
+.....................................................................................
+		Object oriented Programming and Implmentations
+....................................................................................
+ES 6 introduced class.
+Typescript added more power to class declarations
+
+class
+ =>instance variables
+ =>instance methods
+ =>constructors
+ =>How to create instance out of class
+
+class Employee {
+    //instance variables are declared inside class without any keyword
+    id: number=1;
+    firstName: string="";
+    lastName: string="";
+    status: boolean=false;
+}
+
+//create instance/object 
+//here let is keyword
+//employee is just variable : reference variable
+//new is operator to allocate memory
+//Employee()- constructor call
+let employee = new Employee();
+console.log(employee)
+console.log(employee.id,employee.firstName,employee.lastName,employee.status)
+
+
+How to initalize inside constructor?
+
+class Employee {
+    id: number;
+    firstName: string;
+    lastName: string;
+    status: boolean;
+    //add constructor
+    constructor() {
+        this.id = 1;
+        this.firstName = ''
+        this.lastName = ''
+        this.status = false
+    }
+}
+
+//create instance/object 
+//here let is keyword
+//employee is just variable : reference variable
+//new is operator to allocate memory
+//Employee()- constructor call
+let employee = new Employee();
+console.log(employee)
+console.log(employee.id, employee.firstName, employee.lastName, employee.status)
+
+constructor args and default args:
+.................................
+class Employee {
+    id: number;
+    firstName: string;
+    lastName: string;
+    status: boolean;
+    //add constructor , add constructor args
+    constructor(id: number = 0, firstName: string = '', lastName: string = '', status: boolean = false) {
+        this.id = id;
+        this.firstName = firstName
+        this.lastName = lastName
+        this.status = status
+    }
+}
+
+
+let employee = new Employee(1, 'Subramanian', 'Murugan', true);
+console.log(employee)
+console.log(employee.id, employee.firstName, employee.lastName, employee.status)
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
