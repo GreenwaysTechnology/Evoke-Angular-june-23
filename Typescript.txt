@@ -848,8 +848,461 @@ class Employee {
 let employee = new Employee(1, 'Subramanian', 'Murugan', true);
 console.log(employee)
 console.log(employee.id, employee.firstName, employee.lastName, employee.status)
-
+...................................................................................
+			How to declare methods inside class
  
+//class with methods
+
+class ProductService {
+    constructor() { }
+    //methods
+    findAll(): string {
+        return 'List all products'
+    }
+    save(): string {
+        return 'Product save method '
+    }
+    remove(): string {
+        return 'Product remove method'
+    }
+    update(): string {
+        return 'Product Update method'
+    }
+}
+let productService = new ProductService()
+console.log(productService.findAll())
+console.log(productService.save())
+console.log(productService.remove())
+console.log(productService.update())
+....................................................................................
+			 Encapsulation
+....................................................................................
+
+How to restrict code sharing between files and between classes
+
+Typescript only supports encapsulation not javascript.
+
+Encapsulation can be implemented using keywords
+
+1.public 
+2.private
+3.protocted
+
+instance variables and methods can be declared with public,private,protected keywords
+
+By default all instance variables and methods are public 
+
+class Employee {
+    //here variables are by default public 
+    public id: number=1;
+    public firstName: string="";
+    lastName: string="";
+    status: boolean=false;
+}
+
+let employee = new Employee();
+console.log(employee)
+console.log(employee.id,employee.firstName,employee.lastName,employee.status)
+
+private means we can access the variables and methods outside the class.
+
+
+class AuthService {
+    private userName: string = 'admin'
+    private password: string = 'admin'
+}
+let authService= new AuthService()
+//Property 'userName' is private and only accessible within class 'AuthService'.
+
+//7 console.log(authService.userName)
+//~~~~~~~~
+//console.log(authService.userName)
+
+
+class AuthService {
+    private userName: string = 'admin'
+    private password: string = 'admin'
+
+    //private methods
+    private generatePassword(){
+        return '$%$$'
+    }
+    //access private variables and methods via public methods
+    public login(){
+        return this.generatePassword()
+    }
+}
+let authService= new AuthService()
+//Property 'userName' is private and only accessible within class 'AuthService'.
+
+//7 console.log(authService.userName)
+//~~~~~~~~
+//console.log(authService.userName)
+// console.log(authService.generatePassword())
+console.log(authService.login())
+....................................................................................
+			Hierarchy
+...................................................................................
+
+There are two types of Hierarchy
+
+1.HAS-A  - Dependency Injection
+2.IS-A   - Inheritance
+
+HAS-A
+//has-a
+
+class Address {
+    street: string;
+    city: string;
+    state: string
+    country: string;
+    zipcode: string
+    constructor(street: string = '', city: string = '', state: string = '', country: string = '', zipcode: string = '') {
+        this.street = street
+        this.city = city
+        this.state = state
+        this.country = country
+        this.zipcode = zipcode
+    }
+}
+
+class Customer {
+    id: number;
+    name: string;
+    //has-a: depenency Injection
+    address: Address //reference
+    constructor(id: number = 0, name: string = '', address: Address = new Address()) {
+        this.id = id
+        this.name = name
+        this.address = address
+    }
+}
+
+let customer = new Customer(1, 'Subramanian', new Address('3rd street', 'Coimbatore', 'Tamil nadu', 'India', '641111'))
+console.log(customer.id)
+console.log(customer.name)
+console.log(customer.address.street, customer.address.city, customer.address.state, customer.address.country, customer.address.zipcode)
+
+Eg: Another example:
+//repository,service,controller
+
+class CustomerRepository {
+    constructor() {
+
+    }
+    findAll() {
+        return 'Customers Info'
+    }
+}
+class CustomerService {
+    private customerRepo: CustomerRepository
+    constructor(customerRepo: CustomerRepository) {
+        this.customerRepo = customerRepo
+    }
+    findAll() {
+        return this.customerRepo.findAll()
+    }
+}
+class CustomerController {
+    //has-a
+    private customerService: CustomerService
+    constructor(customerService: CustomerService) {
+        this.customerService = customerService
+    }
+    init() {
+        console.log(this.customerService.findAll())
+    }
+}
+let customerCtrl = new CustomerController(new CustomerService(new CustomerRepository()))
+customerCtrl.init()
+....................................................................................
+		 Code Refactoring in has-a/dependency injection
+.....................................................................................
+
+We are going to use public and private keywords to reduce code .
+
+// class Address {
+//     street: string;
+//     city: string;
+//     state: string
+//     country: string;
+//     zipcode: string
+//     constructor(street: string = '', city: string = '', state: string = '', country: string = '', zipcode: string = '') {
+//         this.street = street
+//         this.city = city
+//         this.state = state
+//         this.country = country
+//         this.zipcode = zipcode
+//     }
+// }
+//Level 1: code refactoring: just remove variable declarations
+// class Address {
+//     //all constructor args are local variables
+//    constructor(street: string = '', city: string = '', state: string = '', country: string = '', zipcode: string = '') {
+//         this.street = street
+//         this.city = city
+//         this.state = state
+//         this.country = country
+//         this.zipcode = zipcode
+//     }
+// }
+//convert all constructor all local variables into instance variables
+//just by adding either private or public keyword
+// class Address {
+//     //all constructor args are local variables
+//     constructor(public street: string = '', public city: string = '', public state: string = '', public country: string = '', public zipcode: string = '') {
+//         this.street = street
+//         this.city = city
+//         this.state = state
+//         this.country = country
+//         this.zipcode = zipcode
+//     }
+// }
+//Level 3:
+class Address {
+    //all constructor args are local variables
+    constructor(public street: string = '', public city: string = '', public state: string = '', public country: string = '', public zipcode: string = '') { }
+}
+class Customer {
+    constructor(public id: number = 0, public name: string = '', public address: Address = new Address()) { }
+}
+
+let customer = new Customer(1, 'Subramanian', new Address('3rd street', 'Coimbatore', 'Tamil nadu', 'India', '641111'))
+console.log(customer.id)
+console.log(customer.name)
+console.log(customer.address.street, customer.address.city, customer.address.state, customer.address.country, customer.address.zipcode)
+.................
+
+class CustomerRepository {
+    constructor() { }
+    findAll() {
+        return 'Customers Info'
+    }
+}
+class CustomerService {
+    constructor(private customerRepo: CustomerRepository) { }
+    findAll() {
+        return this.customerRepo.findAll()
+    }
+}
+class CustomerController {
+    //has-a
+    constructor(private customerService: CustomerService) { }
+    init() {
+        console.log(this.customerService.findAll())
+    }
+}
+let customerCtrl = new CustomerController(new CustomerService(new CustomerRepository()))
+customerCtrl.init()
+....................................................................................
+				IS-A Inheritance
+...................................................................................
+
+1.class inheritance
+2.interface based inheritance
+3.abstract class based inheritance
+
+
+
+//base class
+class Account {
+    constructor() {
+        console.log('Account')
+    }
+    protected deposit(): number {
+        return 0
+    }
+}
+//child class 
+class SavingsAccount extends Account {
+    constructor() {
+        super()
+        console.log('Savings Account')
+    }
+    //overriding
+    deposit(): number {
+        return 1000
+    }
+}
+let sb = new SavingsAccount()
+//
+console.log(sb.deposit())
+
+...
+
+interfaces:
+
+//base class
+interface Account {
+    deposit(): number
+}
+//child class 
+class SavingsAccount implements Account {
+    constructor() {
+        console.log('Savings Account')
+    }
+    //overriding
+    deposit(): number {
+        return 1000
+    }
+}
+let sb = new SavingsAccount()
+//
+console.log(sb.deposit())
+
+Abstract classes:
+abstract class Animal {
+    //abstract methods
+    abstract eat():string 
+    //non abstract method
+    saveAnimal(){
+        console.log('Save animals from the Hunter and Global warming')
+    }
+}
+class Tiger extends Animal {
+    eat(): string {
+        return 'Tiger eats'
+    }
+}
+let tiger = new Tiger()
+console.log(tiger.eat())
+tiger.saveAnimal()
+....................................................................................
+				Object Types
+....................................................................................
+We can create objects in many ways
+
+Constructor Pattern:
+
+1.using function -es 5 way
+  function Employee() {} - new Employee()
+2.using classes - es 6 way
+  class Employee {} -> new Employee()
+
+Literal pattern:
+ let employee = {
+   id:1,
+   name:'Subramanian'
+}
+Data type for objects can be declared using three ways
+
+1.class as type
+2.interface as type
+4.type keyword as type.
+
+
+//How to enforce type safty for literal object properties
+
+//class as type
+// class Employee {
+//     id: number
+//     name: string
+// }
+
+//interface as Type
+// interface Employee {
+//     id: number
+//     name: string
+// }
+
+//type keyword as type 
+type Employee = {
+    id: number
+    name: string
+}
+
+let employee: Employee = {
+    id: 2,
+    name: 'Subramanian'
+}
+console.log(employee.id, employee.name)
+...
+Object fields:
+// type 
+class Product {
+    //required Fields and optional Fields
+    id: number
+    name: string
+    qty?: number
+    category?: "Food" | "Electronics" | "Books" | "Vegtables"
+    inStock?: boolean
+}
+
+//create object 
+let product: Product = {
+    id: 1,
+    name: 'Iphone 15',
+    qty: 1000,
+    category:"Electronics",
+    inStock: true
+}
+console.log(product)
+
+let productNew: Product = {
+    id: 1,
+    name: 'Iphone 15',
+    qty: 1000,
+}
+console.log(productNew)
+....................................................................................
+			 Collection/List/Array Types
+			        &
+			     Generics
+...................................................................................
+
+//arrays without type
+
+let list = [1, "hello", true]
+
+//restrict type 
+
+//Non Generic Syntax
+let numList: number[] = [1, 2, 3]
+//Generic syntax : <T>
+let numList2: Array<number> = [1, 2, 4]
+
+class Product {
+    id: number
+    name: string
+    qty?: number
+}
+class ProductService {
+    //return array of products
+    findAll(): Array<Product> {
+        return [{ id: 1, name: 'a', qty: 1 }, { id: 1, name: 'a', qty: 1 }]
+    }
+    list(): Product[] {
+        return [{ id: 1, name: 'a', qty: 1 }, { id: 1, name: 'a', qty: 1 }]
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,18 +1,25 @@
-class Employee {
-    id: number;
-    firstName: string;
-    lastName: string;
-    status: boolean;
-    //add constructor , add constructor args
-    constructor(id: number = 0, firstName: string = '', lastName: string = '', status: boolean = false) {
-        this.id = id;
-        this.firstName = firstName
-        this.lastName = lastName
-        this.status = status
+//arrays without type
+
+let list = [1, "hello", true]
+
+//restrict type 
+
+//Non Generic Syntax
+let numList: number[] = [1, 2, 3]
+//Generic syntax : <T>
+let numList2: Array<number> = [1, 2, 4]
+
+class Product {
+    id: number
+    name: string
+    qty?: number
+}
+class ProductService {
+    //return array of products
+    findAll(): Array<Product> {
+        return [{ id: 1, name: 'a', qty: 1 }, { id: 1, name: 'a', qty: 1 }]
+    }
+    list(): Product[] {
+        return [{ id: 1, name: 'a', qty: 1 }, { id: 1, name: 'a', qty: 1 }]
     }
 }
-
-
-let employee = new Employee(1, 'Subramanian', 'Murugan', true);
-console.log(employee)
-console.log(employee.id, employee.firstName, employee.lastName, employee.status)
