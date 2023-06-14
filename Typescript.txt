@@ -1276,11 +1276,161 @@ class ProductService {
         return [{ id: 1, name: 'a', qty: 1 }, { id: 1, name: 'a', qty: 1 }]
     }
 }
+....................................................................................
+				Decorators-Annotations
+....................................................................................
+
+Annotations:
+  @Annoation eg : @Entity @Override,@Controller @Service....
+
+
+Steps:
+1.add decorator configuration in tsconfig.json
+{
+    "compilerOptions": {
+        "outDir": "build",
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true
+    },
+    "exclude": [
+        "node_modules"
+    ],
+    "files": [
+        "src/index.ts"
+    ]
+}
+/
+2.What is decorators
+  Decorator is just plain javascript function 
 
 
 
+3.How to use decorator
+  You can use decorator on class,fields,methods
+  @Decorator
 
 
+//how to write decorators
+
+//target is variable going to hold the reference of Object.
+
+function Course(target: any) {
+    //decorator logic
+    Object.defineProperty(target.prototype, 'subject', { value: 'Angular' })
+}
+
+
+@Course
+class Student {
+    constructor(public name: string = '') { }
+}
+let student = new Student('Subramanian') as any
+console.log(`Student ${student.name} is learning ${student.subject}`)
+....................................................................
+
+Decorator with parameter
+function Course(courseInfo:any) {
+    //decorator logic
+    return function(target:any){
+        Object.defineProperty(target.prototype, 'subject', { value: courseInfo })
+    }
+}
+
+@Course({ name: 'Java', duration: '40 hrs' })
+class Student {
+    constructor(public name: string = '') { }
+}
+let student = new Student('Subramanian') as any
+console.log(`Student ${student.name} is learning ${student.subject.name} and duration ${student.subject.duration}`)
+....................................................................................
+				Modules
+....................................................................................
+
+How to break your app into files and folders , and how to share code among them?
+
+ That is where modules comes into picture, this is equal to java packages.
+
+For code sharing:
+ code could be class,variables,objects,arrays,functions..
+
+there are two keywords
+1.export 
+2.export default
+
+for linking and using shared code
+there is a keyword called 
+
+eg:
+src/util/myutil.ts
+
+export const firstName: string = 'Subramanian'
+
+src/index.ts
+
+import { firstName } from './util/myutil'
+
+console.log(firstName)
+
+after compiling if you run this code, you will not able to run the code inside browser directly.
+The browser does not support ES 6 modules.
+
+How to run this? 
+  we need to use build tools to pack our code browser understandable format.
+
+Steps:
+
+1.install webpack
+
+  npm install webpack webpack-cli --save-dev
+
+2.add webpack.config.js in the project root dir
+const path = require('path');
+
+module.exports = {
+    entry: './build/index.js',
+    output: {
+        path: path.resolve(__dirname, 'dist'),
+        filename: 'bundle.js',
+    },
+};
+3.build script we need to add inside package.json
+ "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "compile": "tsc --watch",
+    "build": "webpack --watch"
+  }
+
+4.Edit index.html
+
+<body>
+    <h1>Typescript Application Demos</h1>
+    <!-- <script src="build/index.js"></script> -->
+    <script src="dist/bundle.js"></script>
+</body>
+
+You have to open two command prompt
+
+1.compile ts code - npm run compile
+2.build the code   -npm run build
+
+
+eg:
+src/services/customer.service.ts
+
+
+export class CustomerService {
+    constructor() {
+
+    }
+    findAll() {
+        return [{ id: 1, name: 'a' }]
+    }
+}
+src/index.ts
+import { CustomerService } from './services/customer.service'
+
+let customerService = new CustomerService()
+console.log(customerService.findAll())
 
 
 
