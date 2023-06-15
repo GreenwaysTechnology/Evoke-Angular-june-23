@@ -473,9 +473,71 @@ export class AppModule { }
 <div>
   <app-header></app-header>
 </div>
-........
+....................................................................................
 
+Assigment:
+ Create Footer Component 
+ Create Main Component 
+Display inside AppComponent
+.....................................................................................
+			Sub Modules
+..................................................................................
 
+When you create components, we need organize the components according to domain
+
+your-app
+  src
+   |
+   header
+    |
+    header.component.ts
+    header.component.html
+    header.module.ts
+   products
+   customers
+   invoice
+ app.module.ts
+app.component.ts     
+ 
+Steps:
+
+1.create header module
+
+src/header/header.module.ts
+import { NgModule } from '@angular/core'
+import { HeaderComponent } from './header.component';
+
+@NgModule({
+    declarations: [HeaderComponent],
+    imports: [],
+    providers: [],
+    exports: [HeaderComponent]
+})
+export class HeaderModule { }
+
+2.inject header module into main module
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { AppComponent } from './app.component';
+import { HeaderModule } from './header/header.module';
+
+@NgModule({
+  declarations: [
+    AppComponent,   
+  ],
+  imports: [
+    BrowserModule,  
+    HeaderModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+Assigment:
+ Create Footer Component 
+ Create Main Component 
+update this using submodules
 
 
 
