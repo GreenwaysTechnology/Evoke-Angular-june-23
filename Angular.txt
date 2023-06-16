@@ -921,11 +921,54 @@ user.component.html
 
     </div>
 </div>
+....................................................................................
+			   List or Array
+....................................................................................
 
+How to display array of something?
 
+=>We need array
+=>We need to display array.
+   in order to display of array of something we need to iterate array.
 
+Angular provides template based iterator : Directives
 
+Syntax:
+   <ul>
+        <li *ngFor="let product of products">
+            <span>{{product.id}}</span>
+        </li>
+    </ul>
 
+eg:
+app/products/products.component.ts
+import { Component } from '@angular/core';
+import { PRODUCTS } from './products.mock-data';
+
+@Component({
+  selector: 'app-products',
+  templateUrl: './products.component.html',
+  styleUrls: ['./products.component.css']
+})
+export class ProductsComponent {
+    //list of products
+    products:Array<any> = PRODUCTS
+}
+
+mockdata : please refer repository
+
+products.component.html
+<div>
+    <h2>Product Details</h2>
+    <div *ngFor="let product of products ">
+        <p>id {{product.id}}</p>
+        <p>title {{product.title}}</p>
+        <p>Description {{product.description}}</p>
+        <p>Category {{product.category}}</p>
+        <img src={{product.image}} />
+        <p>Rating {{product.rating.rate}}</p>
+    </div>
+</div>
 
 
 
