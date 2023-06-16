@@ -1,0 +1,14 @@
+<div>
+    <h2>User details</h2>
+    <h3>Id {{userId}} </h3>
+    <h3>Name {{userName}}</h3>
+    <h3>Status {{status ? "Available" : "Not Available"}}</h3>
+    <div>
+        <h2>Id {{user?.id}}</h2>
+        <h2>Name {{user?.name}}</h2>
+        <h3>Status {{user?.status}}</h3>
+        <!-- ?. which is called null replacer if city is not available which will replace empty string -->
+        <h3>City {{user.address?.city}}</h3>
+
+    </div>
+</div>

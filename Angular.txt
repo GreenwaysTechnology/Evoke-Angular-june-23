@@ -538,9 +538,389 @@ Assigment:
  Create Footer Component 
  Create Main Component 
 update this using submodules
+...................................................................................
+			 Angular Coding style
+...................................................................................
+ Angular coding best pratices -Angular Style Guide
+
+https://angular.io/guide/styleguide
 
 
+File structure conventions:
+...........................
+->file must follow the domain model.
 
+product:
+ Ng has lot of infra objects (module,component,pipe,services...)
+
+component:
+ It has so many files
+ .ts file
+    component file
+    component spec file -  unit testing file
+ .html file
+ .css file
+
+header.component.ts | spec.ts | .html | .css
+
+header.component.ts
+header.component.html
+header.component.css
+header.component.spec.ts
+
+Modules
+ header.module.ts
+
+
+style guide for file names
+
+domainname.component|service|directive|pipe.ts
+
+hero.component.ts
+hero.service.ts
+hero.directive.ts
+hero.pipe.ts
+
+Custom elements Naming convention:Component selectors
+
+ <app-root> - recommended
+  
+ <approot>  - not recommended.
+
+Do use dashed-case or kebab-case for naming the element selectors of components.
+
+Should i use always app?
+ Not Necessary
+app is default prefix, it can be changed - angular.json file
+
+evoke-root
+evoke-customer
+evoke-product
+.....................................................................................class Names:
+
+ 1.Noun
+ 2.should be meaningfull
+ 3.should have suffix component,service,directive,pipe
+
+ HeaderComponent
+ HeaderService
+ HeaderDirective
+ HeaderPipe
+				Modularization
+....................................................................................
+
+Every angular apps must be modularized.
+
+-es 6 modules
+   folders
+     -files
+
+-angular modules
+    organization of objects
+
+src
+  |
+ app
+  you must have only root files
+  app.component.ts
+  app.module.ts
+ |
+ customer
+   |
+   customer component
+   customer module
+   customer service
+   customer pipe
+
+Use case:
+  -header
+  -footer
+  -body
+
+Component design prototype:
+
+  <body>
+	<app-root>
+		<app-header></app-header>
+	</app-root>
+  </body>
+.....................................................................................
+
+
+Steps to create Component
+
+1.declare componenent class
+2.declare component html 
+3.write component logic
+4.dependency injection inside moudle
+5.refer the compoent inside template.
+
+
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+
+import { AppComponent } from './app.component';
+import { HeaderComponent } from './header/header.component';
+
+@NgModule({
+  declarations: [
+    AppComponent,HeaderComponent
+  ],
+  imports: [
+    BrowserModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+import { Component } from "@angular/core";
+
+
+@Component({
+    selector: 'app-header',
+    templateUrl:'header.component.html'
+})
+export class HeaderComponent {
+
+}
+
+app.component.html
+<div>
+    <app-header></app-header>
+</div>
+
+The components we create should not be injected inside root module.- we have to always create sub module and where we have to inject, and that sub module must be injected into main module.
+
+ Object creation order
+
+  app.module.ts----> submodule---->components
+
+
+src/app/app.module.ts
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+
+import { AppComponent } from './app.component';
+import { HeaderModule } from './header/header.module';
+// import { HeaderComponent } from './header/header.component';
+
+@NgModule({
+  declarations: [
+    // AppComponent,HeaderComponent
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,HeaderModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+
+src/header/header.module.ts
+import { NgModule } from '@angular/core'
+import { HeaderComponent } from './header.component';
+
+@NgModule({
+    declarations: [HeaderComponent],
+    imports: [],
+    providers: []
+})
+export class HeaderModule {
+
+}
+after running this code, still we have error
+
+error: src/app/app.component.html:2:5 - error NG8001: 'app-header' is not a known element:
+1. If 'app-header' is an Angular component, then verify that it is part of this module.
+2. If 'app-header' is a Web Component then add 'CUSTOM_ELEMENTS_SCHEMA' to the '@NgModule.schemas' of this component to suppress this message.
+
+
+Reason:
+
+if you refer, the component from the current module outside module, we cant access, the component is private scope..
+
+How to make it public?
+
+exports:
+  options
+
+import { NgModule } from '@angular/core'
+import { HeaderComponent } from './header.component';
+
+@NgModule({
+    declarations: [HeaderComponent],
+    imports: [],
+    providers: [],
+    exports:[HeaderComponent] //what are the components to be available outside this module
+})
+export class HeaderModule {
+
+}
+
+Problems in the dev flow:
+
+Tasks:
+
+1.create folder
+2.create files - component-ts,html,css,spec
+3.create module
+4.declare class -cmp,service...
+5.refer the classes inside module
+6.you need to inject submodule into main module..
+
+DRY
+
+if you repeate the same thing for every object , which increases lot of time.
+....................................................................................
+Automation:
+ code generation automation
+
+angular cli tool to generate code.
+
+Generates and/or modifies files based on a schematic.
+
+ng generate <schematic> [options]
+ng g <schematic> [options]
+			
+..........................................................................................................................................................................
+			 		MVC overview
+.....................................................................................
+
+Angular is MVC framework.
+
+M- Model - State
+V -View - Template
+C -Controller - Component.
+
+State : Data
+In Angular state can represented 
+
+primitives
+objects
+arrays
+
+controller === component
+
+.............................................................................................
+Data binding:
+ Transfering state to ui(view)  from the component(controller), View to Controller
+
+Types of databinding
+1.interpolation
+2.property binding
+3.attribute binding
+4.event binding
+5.two way data binding
+6.class binding
+7.style binding
+.....................................................................................
+
+In order to show databinding and mvc i will create new project
+
+ng  new mvc-databinding
+
+>cd mvc-databinding
+
+mvc-databinding> code .
+
+mvc-databinding>npm start
+
+1.interpolation:
+ 
+   Transfering data from the controller to View(Template).
+
+Data:
+  Data can be string,number,boolean,object,array
+
+Where we can declare data?
+  ->Inside controller  - Inside component.
+
+Use Case:
+  How to display user information?
+
+Steps:
+1.create module 
+2.create component
+3.inject user component into user module
+4.inject usermodule into app module.
+
+
+E:\session\Evoke\mvc-databinding>ng g m user --module=app
+CREATE src/app/user/user.module.ts (190 bytes)
+UPDATE src/app/app.module.ts (379 bytes)
+
+
+E:\session\Evoke\mvc-databinding>ng g c user/user --module=user --export=true --flat=true
+CREATE src/app/user/user.component.html (19 bytes)
+CREATE src/app/user/user.component.spec.ts (545 bytes)
+CREATE src/app/user/user.component.ts (194 bytes)
+CREATE src/app/user/user.component.css (0 bytes)
+UPDATE src/app/user/user.module.ts (297 bytes)
+
+
+app.component.html
+<div>
+  <h1>MVC and Data Binding Examples</h1>
+  <hr/>
+  <h1>Interpolation:User component</h1>
+  <app-user></app-user>
+</div>
+...
+
+How to declare data?
+user.type.ts
+export class User {
+    id: number | undefined |0
+    name?: string | undefined
+    status?: boolean
+    address?: {
+        city?: string
+    }
+}
+
+user.component.ts
+import { Component } from '@angular/core';
+import { User } from './user.type';
+
+@Component({
+  selector: 'app-user',
+  templateUrl: './user.component.html',
+  styleUrls: ['./user.component.css']
+})
+export class UserComponent {
+  //model-data : primitive
+  userId: number = 100
+  userName: string = 'Subramanian'
+  status: boolean = true
+  //object
+  user:User = {
+    id: 1,
+    name: 'Robert',
+    status: true,
+    address: {
+      city: 'New york'
+    }
+  }
+}
+
+user.component.html
+<div>
+    <h2>User details</h2>
+    <h3>Id {{userId}} </h3>
+    <h3>Name {{userName}}</h3>
+    <h3>Status {{status ? "Available" : "Not Available"}}</h3>
+    <div>
+        <h2>Id {{user?.id}}</h2>
+        <h2>Name {{user?.name}}</h2>
+        <h3>Status {{user?.status}}</h3>
+        <!-- ?. which is called null replacer if city is not available which will replace empty string -->
+        <h3>City {{user.address?.city}}</h3>
+
+    </div>
+</div>
 
 
 
