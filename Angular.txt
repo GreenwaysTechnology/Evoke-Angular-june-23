@@ -969,6 +969,178 @@ products.component.html
         <p>Rating {{product.rating.rate}}</p>
     </div>
 </div>
+.....................................................................................
+			    Service layer
+....................................................................................
+
+In MVC data should not be kept in the controller(component), rather we have to keep data and biz logic inside another object called "Service"
+
+Service just a class , must be decorated with "@Injectable"
+
+@Injectable()
+export class ProductService {
+
+}
+
+Inside module we have to inject 
+
+declarations: [Components]
+imports:[SubModules]
+providers[Services]
+
+Create new Project:
+
+ng new mvc-service
+
+cd mvc-service
+
+Steps:
+
+/products/product.service.ts
+import { Injectable } from "@angular/core";
+
+@Injectable()
+export class ProductService {
+
+}
+
+Declare ProductService inside module with provider configuration
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ProductsComponent } from './products.component';
+import { ProductService } from './products.service';
+
+
+
+@NgModule({
+  declarations: [
+    ProductsComponent
+  ],
+  imports: [
+    CommonModule
+  ],
+  exports: [
+    ProductsComponent
+  ],
+  providers:[ProductService]
+})
+export class ProductsModule { }
+
+Dependency Injection:
+ ProductComponent has ProductService...
+import { Component } from '@angular/core';
+import { ProductService } from './products.service';
+
+@Component({
+  selector: 'app-products',
+  templateUrl: './products.component.html',
+  styleUrls: ['./products.component.css']
+})
+export class ProductsComponent {
+  //variable to hold products data
+  // products: Array<any> | undefined
+  // products: Array<any> = []; //empty array default value
+
+  //skip compiler errors from "uninitalization"
+  products!: Array<any>;
+
+  constructor(private productService: ProductService) {
+    this.products = this.productService.findAll()
+  }
+}
+
+Short cut for providers:
+  //providers:[ProductService]
+
+you dont need to inject services with providers configuration
+
+Inside Service class itself you can alter.
+
+import { Injectable } from "@angular/core";
+import { PRODUCTS } from "./products.mock-data";
+
+@Injectable({ providedIn: 'root' })
+export class ProductService {
+
+    //apis 
+    public findAll(): Array<any> {
+        return PRODUCTS
+    }
+}
+.....................................................................................
+			Data initalization/ service api calls
+.....................................................................................
+
+@Component({
+  selector: 'app-products',
+  templateUrl: './products.component.html',
+  styleUrls: ['./products.component.css']
+})
+export class ProductsComponent {
+  //variable to hold products data
+  // products: Array<any> | undefined
+  // products: Array<any> = []; //empty array default value
+
+  //skip compiler errors from "uninitalization"
+  products!: Array<any>;
+
+  constructor(private productService: ProductService) {
+    this.products = this.productService.findAll()
+  }
+}
+
+here you can notice the code gets initalized inside constructor which is not recommended.
+.....................................................................................
+			  Component Life Cycles
+.....................................................................................
+
+Life cycles are methods which are called automatically when componets gets initalized
+
+
+This is method which is called after compoent is ready to render
+
+ngOnInit(): void {
+    this.products = this.productService.findAll()
+}
+ngOnInit method is used to initalze api calls 
+
+import { Component, OnInit } from '@angular/core';
+import { ProductService } from './products.service';
+
+@Component({
+  selector: 'app-products',
+  templateUrl: './products.component.html',
+  styleUrls: ['./products.component.css']
+})
+export class ProductsComponent implements OnInit {
+  //variable to hold products data
+  // products: Array<any> | undefined
+  // products: Array<any> = []; //empty array default value
+
+  //skip compiler errors from "uninitalization"
+  products!: Array<any>;
+
+  constructor(private productService: ProductService) {
+    // this.products = this.productService.findAll()
+  }
+  ngOnInit(): void {
+    this.products = this.productService.findAll()
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
