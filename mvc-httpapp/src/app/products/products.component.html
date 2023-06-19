@@ -1,6 +1,12 @@
-<div *ngFor="let product of products">
-    <h1>Category {{product.category}}</h1>
+<div>
+
+</div>
+<!-- async pipe :used to bind observable directly -->
+<div *ngFor="let product of products | async">
+    {{product | json}}
+    <h1>Today (US Format) : {{today | date}} Today (Indian Format) : {{today | date:'dd/MM/yy'}}</h1>
+    <h1>{{product.category | titlecase}}</h1>
     <h2>{{product.id}}</h2>
-    <h2>{{product.title}}</h2>
-    <h2>Price {{product.price}}</h2>
+    <h2>{{product.title | uppercase}}</h2>
+    <h2>Price(USD) {{product.price | currency}} - Price(INR) {{product.price | currency:'INR'}} </h2>
 </div>

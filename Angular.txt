@@ -1456,6 +1456,69 @@ export class ProductsService {
     }
   }
 }
+.....................................................................................
+			UI Features - Data formating -Pipes
+.....................................................................................
+What is pipe?
+ pipe object used for data formating.
+
+eg:
+ show uppercase
+ show money values - $,#,
+ show date format  - 1/10/2021 , feb 10 2021...
+ custom formates
+
+Angular provides lot of built in pipes, you can write your own pipes as well.
+....
+Syntax:
+  some data | nameof the pipe.
+
+Pipe with Input :
+  some data | nameof the pipe:input
+
+Builtin pipes:
+
+DatePipe: Formats a date value according to locale rules.
+
+UpperCasePipe: Transforms text to all upper case.
+
+LowerCasePipe: Transforms text to all lower case.
+
+CurrencyPipe: Transforms a number to a currency string, formatted according to locale rules.
+
+DecimalPipe: Transforms a number into a string with a decimal point, formatted according to locale rules.
+
+PercentPipe: Transforms a number to a percentage string, formatted according to locale rules.
+
+asyncPipe : to bind list of values async
+   - used to bind observables directly.
+
+JsonPipe: to show object in json format
+
+eg:
+<div>
+
+</div>
+<!-- async pipe :used to bind observable directly -->
+<div *ngFor="let product of products | async">
+    {{product | json}}
+    <h1>Today (US Format) : {{today | date}} Today (Indian Format) : {{today | date:'dd/MM/yy'}}</h1>
+    <h1>{{product.category | titlecase}}</h1>
+    <h2>{{product.id}}</h2>
+    <h2>{{product.title | uppercase}}</h2>
+    <h2>Price(USD) {{product.price | currency}} - Price(INR) {{product.price | currency:'INR'}} </h2>
+</div>
+
+
+
+
+
+
+
+
+
+
+
 
 
 
