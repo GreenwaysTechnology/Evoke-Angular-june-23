@@ -13,9 +13,15 @@ export class ProductsComponent implements OnInit {
 
   //skip compiler errors from "uninitalization"
   products!: Array<any>;
+  selectedProduct!: any
+  selectedIndex = -1;
 
   constructor(private productService: ProductService) {
     // this.products = this.productService.findAll()
+  }
+  showProduct(product: any,index:any) {
+    this.selectedIndex = index
+    this.selectedProduct = product
   }
   ngOnInit(): void {
     this.products = this.productService.findAll()

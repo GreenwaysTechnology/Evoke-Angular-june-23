@@ -1127,23 +1127,335 @@ export class ProductsComponent implements OnInit {
     this.products = this.productService.findAll()
   }
 }
+....................................................................................
+				Service Types
+.....................................................................................
+
+Async Programming:
+
+Async programming without blocking current thread, tasks are executed in the background in the kernal.
+Once the operation is completed , kernal will send the data to main thread.
+
+Javascript is since single threaded, it has implemented async programming features.
+
+Implementation:
+
+1.callback style - pure js style, it is core style.
+2.Promise Style - It is abstraction on callbacks, to abstract complexity of                   callbacks we use promises.
+
+3.Promises with async ...await - it is simplified version of Promises
+..................................................................................
+			  Advanced async programming
+
+Promises generally has notation of "fire and forget" model.
+
+                           Services - Reactive Programming
+				 Using rxjs
+.....................................................................................	
+
+What is Reactive Programming?
+ An API for asynchronous programming with observable streams
+
+Reactive Programming is not new approach to write modern apps, but it is old, collective ideas in one place.
+
+Reactive Programming concepts
+
+1.Async programming
+2.Data Streaming
+3.Event driven Programming  
+
+ Rx = {async,data streaming,event driven Programming}
+
+Reactive programming is similar design patterns , we need implmentation.
+
+Every programming language has "extension" with Reactive - ReactiveX
+
+Java:
+   -Rxjava
+   -Project Reactor
+   -Mutiny
+Js:
+   -RXJS
+
+Angular uses rxjs internally for building advanced stream based async, event driven programming model
+
+Reactive Programming has been implemented with three major principles
+
+1.Observable Design Pattern -  Event Driven programming
+2.functional programming principles - enables declarative programming.
+3.iterator design pattern - push based iterator.
+.............................................................................................
+Core concepts:
+
+Core concepts:
+
+1.Publisher
+   Publisher is object who publishes the data(events)
+
+2.Subscriber
+  Subscriber is object who listens for the data(events
 
 
+Publisher---publish data(event)-----|-----|----|-------Subscriber
+                                     Stream
+                                    |     |    |
+                               operator operator operator
 
 
+3.Operators
+   Operators are apis or methods or function which creates and process the stream.
+
+4.Stream
+    flow of data
+....................................................................................
+				Angular and rx js
+1.Service is Publisher
+2.Component is Subscriber or Listener
+
+Objects:
+
+Observable: represents the idea of an invokable collection of future values or events.
+
+Observer: is a collection of callbacks that knows how to listen to values delivered by the Observable.
+
+Subscription: represents the execution of an Observable, is primarily useful for cancelling the execution.
+
+Operators: are pure functions that enable a functional programming style of dealing with collections with operations like map, filter, concat, reduce, etc.
+
+Subject: is equivalent to an EventEmitter, and the only way of multicasting a value or event to multiple Observers.
+
+Schedulers: are centralized dispatchers to control concurrency, allowing us to coordinate when computation happens on e.g. setTimeout or requestAnimationFrame or others.
+.....................................................................................
+
+What value we can stream?
+  Stream any value including primitives,arrays,collections,promises.....
+
+Steps:
+1.create Stream
+   -From scratch
+	
+   -Using operators
+
+Any stream can emit three types of event
+
+1.data event - emits data
+2.error event - emits error
+3.complete event - emits complete
+.....................................................................................
+Eg:
+
+service
+import { Injectable } from '@angular/core';
+import { PRODUCTS } from './products.mock-data';
+import { Observable, map, of, from, filter } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ProductsService {
+
+  constructor() { }
+
+  //async api
+  // findAll(): Observable<any> {
+  //   //return products
+  //   // return PRODUCTS  //Observable
+  //   return new Observable(subscriber => {
+  //     //emit data 
+  //     subscriber.next(PRODUCTS)
+  //     subscriber.complete()
+  //   })
+  // }
+  // findAll(): Observable<any[]> {
+  //   //of is operator which returns stream of data
+  //   return of(PRODUCTS)
+  // }
+  //stream processing
+  findAll(): Observable<any[]> {
+    //of is operator which returns stream of data
+    return from(PRODUCTS).pipe(
+      //data processing/streaming logic
+      filter(item => {
+        return item.category === 'jewelery'
+      })
+    )
+  }
+}
+
+//product.component.ts
+
+import { Component, OnInit } from '@angular/core';
+import { ProductsService } from './products.service';
+import { Observable } from 'rxjs';
+
+@Component({
+  selector: 'app-products',
+  templateUrl: './products.component.html',
+  styles: [
+  ]
+})
+export class ProductsComponent implements OnInit {
+  //! - it is ts feature to avoid variable initalization
+  products: Array<any> =[]
+  constructor(private productService: ProductsService) {
+
+  }
+  ngOnInit() {
+    // this.products = this.productService.findAll()
+    this.productService.findAll().subscribe({
+      //data event
+      next: product => {
+        console.log(product)
+        //this.products = products
+        this.products.push(product)
+
+      }
+    })
+  }
+}
+product.component.html
+<div>
+    <div *ngFor="let product of products">
+        <h1>Category {{product.category}}</h1>
+        <h2>{{product.id}}</h2>
+        <h2>{{product.title}}</h2>
+        <h2>Price {{product.price}}</h2>
+    </div>
+</div>
+....................................................................................
+			 Connecting to REST API Back end
+....................................................................................
+				HTTP Programming using Rxjs
+.....................................................................................
+
+Most of the front end applications need to communicate with a server over the HTTP protocal to download and upload data and access the back end services.
+
+Angular provides a client HTTP APi called "HttpClient" built in service class.
+
+HttpClient service class has been listed in the module "@angular/common/http"  HttpClientModule.
+
+This has to be injected into the module where you need to interact with http service.
+
+Steps:
+
+1.server rest api
+  -java
+  -c#
+  -python
+  -php
+  -node
+
+we are going to use third party fake api
+
+https://fakestoreapi.com/products
+
+.......
+
+products/product.type.ts
+export class Product {
+    id!: number
+    title!: string
+    price!: number
+    description?: string
+    category?: string
+    image?: string
+    rating?: {
+        rate: number
+        count: number
+    }
+}
+
+products/product.service.ts
+
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http'
+import { Product } from './product.type'
+import { Observable } from 'rxjs'
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ProductsService {
+  
+  constructor(private http: HttpClient) { }
+
+  findAll(): Observable<Product[]> {
+    //talk to back end service
+    const url = 'https://fakestoreapi.com/products'
+    return this.http.get<Product[]>(url)
+  }
+}
+
+import { Component } from '@angular/core';
+import { ProductsService } from './products.service';
+import { Product } from './product.type';
+
+@Component({
+  selector: 'app-products',
+  templateUrl: './products.component.html',
+  styles: [
+  ]
+})
+export class ProductsComponent {
+  products!: Array<Product>
+
+  constructor(private productService: ProductsService) { }
+  ngOnInit() {
+    this.productService.findAll().subscribe({
+      next: products => {
+        console.log(products)
+        this.products = products
+      }
+    })
+  }
+}
+//product.component.html
+
+<div *ngFor="let product of products">
+    <h1>Category {{product.category}}</h1>
+    <h2>{{product.id}}</h2>
+    <h2>{{product.title}}</h2>
+    <h2>Price {{product.price}}</h2>
+</div>
+.....................................................................................
+			How to handle HTTP errors
+....................................................................................
+
+instead of throwing error, we can convert into meanful response, so that app never crash.
+
+catchError
+  Catches errors on the observable to be handled by returning a new observable or throwing an error.
 
 
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http'
+import { Product } from './product.type'
+import { Observable, catchError, of } from 'rxjs'
 
+@Injectable({
+  providedIn: 'root'
+})
+export class ProductsService {
 
+  constructor(private http: HttpClient) { }
 
-
-
-
-
-
-
-
-
+  findAll(): Observable<Product[]> {
+    //talk to back end service
+    const url = 'https://fakestoreapi.com/products'
+    return this.http.get<Product[]>(url).pipe(
+      catchError(this.handleError<Product[]>('fetchProducts', [{ id: 0, title: 'title', price: 0.0 }]))
+    )
+  }
+  //private method
+  //handle error Api
+  private handleError<T>(operation = 'operation', result?: T) {
+    //return function
+    return (error: any): Observable<T> => {
+      console.log(error)
+      return of(result as T)
+    }
+  }
+}
 
 
 
