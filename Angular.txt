@@ -1775,6 +1775,75 @@ export class ProductImageComponent {
 }
 
 <img [src]="productImage.image" height="100" width="100"/>
+.....................................................................................
+		    Compoent as Prop:Content Projection
+....................................................................................
+
+
+<div>
+    <p></p>
+</div>
+
+<app-products>
+   ? ---yes here can pass something
+</app-products>
+<app-products [title]="title"/> - self closing - you are not passing any thing
+
+@Input()
+title:string
+
+<app-products>
+    <other-compontent> component/html element as prop
+</app-products>
+	|
+ <ng-content></ng-content> - slot
+
+eg:
+child:
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-appheader',
+  templateUrl: './appheader.component.html',
+})
+export class AppheaderComponent {
+
+}
+<div id="carouselExample" class="carousel slide">
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <ng-content></ng-content>
+        </div>
+    </div>
+
+</div>
+<div class="container">
+  <!-- <app-welcome></app-welcome> -->
+  <!-- <app-products></app-products> -->
+  <app-appheader>
+      <app-logo />
+  </app-appheader>
+  <hr />
+  <app-products />
+
+</div>
+
+logo.component.html
+<img src="favicon.ico" />
+<span>Evoke Technologies</span>
+.....................................................................................
+
+Use case:
+ Create user component and break into multiple compoents
+https://jsonplaceholder.typicode.com/users
+
+
+
+
+
+
+
+
 
 
 

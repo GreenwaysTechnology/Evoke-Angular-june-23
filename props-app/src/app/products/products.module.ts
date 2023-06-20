@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ProductsDetailsComponent } from './products-details.component';
 import { ProductsViewComponent } from './products-view.component';
 import { ProductImageComponent } from './product-image.component'
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { ProductImageComponent } from './product-image.component'
     ProductImageComponent
   ],
   imports: [
-    CommonModule, HttpClientModule
+    CommonModule, HttpClientModule,    NgbModule
+
   ],
   exports: [ProductsComponent, ProductsDetailsComponent, ProductsViewComponent, ProductImageComponent]
 })
