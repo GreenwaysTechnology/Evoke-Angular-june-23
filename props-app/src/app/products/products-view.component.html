@@ -1,0 +1,7 @@
+<!-- <p>{{product | json}}</p> -->
+<h3>Id  {{product.id}}</h3>
+<p class="lead" style="color:rgb(242, 7, 7)"> Category : {{product.category | titlecase}}</p>
+<h2>{{product.title | uppercase}}</h2>
+<h2>Price(USD) {{product.price | currency}} - Price(INR) {{product.price | currency:'INR'}} </h2>
+<app-product-image [productImage]="product"></app-product-image>
+<p class="badge text-bg-secondary">Rating {{product.rating?.rate}}</p>

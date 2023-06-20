@@ -1579,12 +1579,202 @@ export class ProductsComponent {
     this.products = this.productService.findAll()
   }
 }
+...................................................................................
+			 Compoent design and data sharing
+....................................................................................
+
+Component design is based on tree model. it is like html only
+
+   <div> -parent                                  divObject 
+     <div>child                                       |
+        <div>child                                    divobject
+            <div>child    ===> object model             |
+            </div>                                      divObject
+         </div>                                           |
+      </div>                                              divObject
+    </div>
+         |                                                |
+      tree                                            object tree(dom tree)
+
+                                |
+                                                          appParent
+    <app-parent>                                               |         
+          <app-child1>                                         Child1
+	     <app-child2>                                        |
+		 <app-child3>    ====>Component tree             child2
+		  </app-child3>                                    |
+	      </app-child2>                                        Child3
+            <app-child1>
+      <app-parent>
+
+In the tree we can share data from parent to child => Props pattern
+In the tree we can share data from child to parent =>Event Emitter Pattern
+In the tree we can share across the components => Rxjs Pattern
+
+How to view existing component tree?
+
+Angular dev tool
+...................................................................................
+				Props Pattern
+...................................................................................
+
+Passing data from the parent to child
+
+[] - syntax to pass data
+
+
+Step:
+1.Pass data to child from parent
+
+parent template
+
+   <app-child [propName]="PropValue" ></app-child>
+ProName is just variable
+propValue can be any value from primitives to objects, array
+propValue can be instance variable of Parent compoent
+ <app-hello [title]="title" ></app-hello>
+
+
+2.Child component need to read data
+
+Angular provides a decorator to read prop values
+
+@Input
+
+eg:
+parent component
+src/app/greeter/welcome.component.ts
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-welcome',
+  templateUrl: './welcome.component.html',
+  styleUrls: ['./welcome.component.css']
+})
+export class WelcomeComponent {
+    //variable to be passed to the child
+    title:string = "Hello Component"
+}
+src/app/greeter/welcome.component.html
+<div>
+    <!-- Pass data to hello component -->
+    <app-hello [title]="title" ></app-hello>
+</div>
+
+Child Component:
+
+src/app/greeter/hello.component.ts
+
+import { Component, Input } from '@angular/core';
+
+@Component({
+  selector: 'app-hello',
+  templateUrl: './hello.component.html',
+  styleUrls: ['./hello.component.css']
+})
+export class HelloComponent {
+  @Input()
+  title!: string
+}
+
+src/app/greeter/hello.component.html
+<div>
+    <h1>{{title}}</h1>
+</div>
+.....................................................................................
+
+Parent compoent:
+import { Component } from '@angular/core';
+import { ProductsService } from './products.service';
+import { Product } from './product.type';
+import { Observable } from 'rxjs';
+
+@Component({
+  selector: 'app-products',
+  templateUrl: './products.component.html',
+  styles: [`
+    h3 {
+      color:red;
+    }
+  `]
+})
+export class ProductsComponent {
+  today: Date = new Date()
+  products!: Observable<Product[]>
+
+  constructor(private productService: ProductsService) { }
+  ngOnInit() {
+    this.products = this.productService.findAll()
+  }
+}
+
+<app-products-details [products]="products" [today]="today" >
+
+</app-products-details>
 
 
 
+Child compoents
+import { Component,Input } from '@angular/core';
+import { Product } from './product.type';
+import { Observable } from 'rxjs';
+
+@Component({
+  selector: 'app-products-details',
+  templateUrl: './products-details.component.html',
+  styleUrls: ['./products-details.component.css']
+})
+export class ProductsDetailsComponent {
+  @Input()
+  today: Date = new Date()
+  @Input()
+  products!: Observable<Product[]>
+
+}
+
+<div *ngFor="let product of products | async" class="box">
+    <app-products-view [product]="product" ></app-products-view>
+</div>
+
+
+import { Component, Input } from '@angular/core';
+import { Product } from './product.type';
+
+@Component({
+  selector: 'app-products-view',
+  templateUrl: './products-view.component.html',
+  styleUrls: ['./products-view.component.css']
+})
+export class ProductsViewComponent {
+  @Input()
+  product!: Product
+}
+
+
+<!-- <p>{{product | json}}</p> -->
+<h3>Id  {{product.id}}</h3>
+<p class="lead" style="color:rgb(242, 7, 7)"> Category : {{product.category | titlecase}}</p>
+<h2>{{product.title | uppercase}}</h2>
+<h2>Price(USD) {{product.price | currency}} - Price(INR) {{product.price | currency:'INR'}} </h2>
+<app-product-image [productImage]="product"></app-product-image>
+<p class="badge text-bg-secondary">Rating {{product.rating?.rate}}</p>
 
 
 
+import { Component, Input } from '@angular/core';
+import { Product } from './product.type';
+
+@Component({
+  selector: 'app-product-image',
+  templateUrl: './product-image.component.html',
+  styleUrls: ['./product-image.component.css']
+})
+export class ProductImageComponent {
+  @Input()
+  productImage!: Product
+}
+
+<img [src]="productImage.image" height="100" width="100"/>
 
 
 
