@@ -1,17 +1,18 @@
 /* global style */
-body {
+/* body {
     margin-left: 90px;
     margin-right: 90px;
     margin-top: 0px;
     padding: 10px 10px 10px 10px;
     background-color: beige;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
+} */
 h1 {
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-size: small;
+    color: aliceblue;
 }
-div {
+.box {
     border: 2px solid green;
     margin-top: 10px ;
     border-radius: 15px;

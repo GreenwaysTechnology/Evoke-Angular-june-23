@@ -6,15 +6,18 @@ import { Observable } from 'rxjs';
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
-  styles: [
-  ]
+  styles: [`
+    h3 {
+      color:red;
+    }
+  `]
 })
 export class ProductsComponent {
   // products!: Array<Product>
   today: Date = new Date()
 
   products!: Observable<Product[]>
-  
+
   constructor(private productService: ProductsService) { }
   ngOnInit() {
     // this.productService.findAll().subscribe({
