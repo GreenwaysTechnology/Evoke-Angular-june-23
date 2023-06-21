@@ -5,16 +5,18 @@ import { HttpClientModule } from '@angular/common/http';
 import { ProductsDetailsComponent } from './products-details.component';
 import { ProductsViewComponent } from './products-view.component';
 import { ProductImageComponent } from './product-image.component'
+import { FormsModule } from '@angular/forms'
 
 @NgModule({
   declarations: [
     ProductsComponent,
     ProductsDetailsComponent,
     ProductsViewComponent,
-    ProductImageComponent
+    ProductImageComponent,
+
   ],
   imports: [
-    CommonModule, HttpClientModule
+    CommonModule, HttpClientModule, FormsModule
 
   ],
   exports: [ProductsComponent, ProductsDetailsComponent, ProductsViewComponent, ProductImageComponent]

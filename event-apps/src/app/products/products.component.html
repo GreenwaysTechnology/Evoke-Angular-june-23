@@ -3,7 +3,6 @@
      <h1 style="text-align: center;">{{status}}</h1>
 </div>
 <ng-template #notLoading>
-    <app-products-details [products]="products" [today]="today"/>
+    <app-products-details [products]="products" [today]="today" (onSendRequest)="getComment($event)" />
 </ng-template>
 
-<!-- <app-products-details [products]="products" [today]="today"/> -->

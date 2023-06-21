@@ -20,3 +20,8 @@ h1 {
     padding: 5px;
     background-color: aquamarine;
 }
+
+.selected {
+    background-color: rgb(191, 187, 203);
+    color: rgb(215, 16, 16);
+}

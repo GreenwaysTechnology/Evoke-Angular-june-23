@@ -18,6 +18,7 @@ export class ProductsComponent {
   status: string = 'Loading....'
   loading: boolean = true;
 
+
   constructor(private productService: ProductsService) { }
 
   ngOnInit() {
@@ -26,6 +27,11 @@ export class ProductsComponent {
     setTimeout(() => {
       this.products = this.productService.findAll()
       this.loading = !this.loading
-    },5000)
+    }, 0)
+  }
+  getComment(e: any) {
+    //console.log('this is products parent', e)
+    //pass data to service
+    this.productService.getComment(e)
   }
 }

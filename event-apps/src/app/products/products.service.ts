@@ -17,6 +17,12 @@ export class ProductsService {
       catchError(this.handleError<Product[]>('fetchProducts', [{ id: 0, title: 'title', price: 0.0 }]))
     )
   }
+
+  getComment(comment:string){
+     console.log('product service comment',comment)
+  }
+
+
   //private method
   //handle error Api
   private handleError<T>(operation = 'operation', result?: T) {

@@ -1,4 +1,4 @@
-import { Component,Input } from '@angular/core';
+import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { Product } from './product.type';
 import { Observable } from 'rxjs';
 
@@ -12,5 +12,12 @@ export class ProductsDetailsComponent {
   today: Date = new Date()
   @Input()
   products!: Observable<Product[]>
+
+  @Output()
+  onSendRequest = new EventEmitter<string>();
+
+  getComment(e: any) {
+    this.onSendRequest.emit(e)
+  }
 
 }
