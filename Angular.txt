@@ -1836,17 +1836,342 @@ logo.component.html
 Use case:
  Create user component and break into multiple compoents
 https://jsonplaceholder.typicode.com/users
+.....................................................................................
+			 Event Handling
+
+Plain js:
+
+<button onclick="listener()">Click</button>
+
+In Angular , event handling is done using a symbol called ()
+
+<button (NameoftheEvent)="listener()">Click</button>
+<button (click)="listener()">Click</button>
+.............................................
+eg:
+<div>
+    <button (click)="onClick()">Click</button>
+</div>
+
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-myevents',
+  templateUrl: './myevents.component.html',
+  styles: [
+  ]
+})
+export class MyeventsComponent {
+  //Listener
+  onClick() {
+    console.log('button is clicked')
+  }
+}
+How to pass input to the listener?
+<div>
+    {{greet}}
+    <button (click)="updateGreet('Hello How are you?')">Update</button>
+</div>
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-myevents',
+  templateUrl: './myevents.component.html',
+  styles: [
+  ]
+})
+
+export class MyeventsComponent {
+
+  greet: string = ""
+
+  //Listener
+  onClick() {
+    console.log('button is clicked')
+  }
+  updateGreet(message:any) {
+    this.greet = message
+  }
+}
+.............................................
+How to get input from the user?
+
+You can bind text box with input event
+YOu can read text box value with "$event" Object
+<div>
+    <h1>Name : {{name}}</h1>
+    <input (input)="onRead($event)"/>
+</div>
+export class MyeventsComponent {
+
+  greet: string = ""
+  name:string=""
+
+  //Listener
+  onClick() {
+    console.log('button is clicked')
+  }
+  updateGreet(message: any) {
+    this.greet = message
+  }
+  //evt means event object, through which you can access text box value
+  onRead(evt:any) {
+    this.name = evt.target.value
+  }
+}
+
+Two way data binding:
+......................
+
+Two way data binding is nothing whenever we change values in the UI via input controls, the associated "variables" will get updated automatically.
+When ever the variable is updated, the UI will rerender automatically.
+
+User-->trigger--input--->listener is called--->|update the variable--->When ever the variable is updated --->UI is rerendered.
+
+Code Refactoring:
+................
+Without Listeners:
+
+export class MyeventsComponent {
+
+  greet: string = ""
+  name:string=""
+  city:string="Chennai"
+
+  //Listener
+  onClick() {
+    console.log('button is clicked')
+  }
+  updateGreet(message: any) {
+    this.greet = message
+  }
+  //evt means event object, through which you can access text box value
+  onRead(evt:any) {
+    this.name = evt.target.value
+  }
+}
+<div>
+    <h1>City : {{city}}</h1>
+    <input (input)="city=$event.target.value"/>
+</div>
+
+What if i want to bind the default value?
+
+<input (input)="city=$event.target.value" [value]="city"/>
+					    |
+
+[] - syntax is used to declare property in the components.
+[] - syntax can be used inside html attributes also
+
+if you use [] inside html elements which is called "Attribute Binding"
+if you use [] inside Components which is called "Property Binding"
+
+Why Attribute Binding?
+
+   "If you want to bind html elements attribute value dynamically then can use attribute binding"
+	
+   eg;
+     <img src="logo.png"/>
+     <img [src]="logo" />
+     <div hidden>
+     </div>
+     <div [hidden]="isHidden">
+     </div>
+
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-myevents',
+  templateUrl: './myevents.component.html',
+  styles: [
+  ]
+})
+export class MyeventsComponent {
+
+    //attribute binding
+   myLogo:string= "favicon.ico"
+  
+}
+<div>
+    <h1>Attribute Binding</h1>
+    <!-- static image -->
+    <img src="favicon.ico"/>
+    <img [src]="myLogo"/>
+</div>
+
+Attribute binding with Event Handling
+
+<div>
+     <div [hidden]="isHidden">
+        <h1>Hey I am hidden or shown</h1>
+    </div>
+    <button (click)="showOrHide()">Show/Hide</button>
+</div>
+
+export class MyeventsComponent {
+
+  isHidden: boolean = true
+  showOrHide() {
+    this.isHidden = !this.isHidden
+  }
+}
+.................................................................................
+
+Two data binding without listener, without event binding, without attributing
+
+event +property binding [(ngModel)]  -Bannana in a box notation
+
+<input [(ngModel)]="city"  />
+
+After this code , you will get error like below
+
+Can't bind to 'ngModel' since it isn't a known property of 'input'.
+
+28     <input [(ngModel)]="city"/>
+              ~~~~~~~~~~~~~~~~~~
+
+Solution:
+  ngModel is object which is not part of "commonmodule"
+
+ngModel is available as part of "@angular/forms"
+
+This need to be injected into module where ever you use ngModel
+eg
+src/app/events/events.module.ts
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MyeventsComponent } from './myevents.component';
+import { FormsModule } from '@angular/forms';
+
+@NgModule({
+  declarations: [
+    MyeventsComponent
+  ],
+  imports: [
+    CommonModule,FormsModule
+  ],
+  exports: [
+    MyeventsComponent
+  ]
+})
+export class EventsModule { }
+....................................................................................
+				Directives
+....................................................................................			
+Directives:
+
+ Directive is custom element / attribute..
 
 
+1.Template directive
+   The directive with Template ; all components create template directive
+  <app-root>
+  <app-profile>
 
+@Component is decorator which inherits @Directive
 
+2.Structural directive
 
+  It is one of the "special attribute" directive
+  All structural directive starts with "*" notation.
 
+Why structural directive?
+->change the DOM Layout by adding and removing dom elements : Dom manulation.
 
+Common structural directives
+1.*ngFor : for loop
+2.*ngIf  : if condition
+3.*ngSwitch : switch
 
+2.*ngIf  : if condition
+ 
+if you are implementing toggling .
 
+ add or remove dom element dynamically.
 
+Caution : dont add or remove elements dynamically which degrades performances.
 
+inside of that use "hidden" attribute
 
+if...else:
+..........
+  <h1>*ngIf</h1>
+     <button class="btn btn-success" (click)="toggle()">Toggle</button>
+     <!--Show and Hide-->
+     <div *ngIf="!isHidden">
+          <h1>Hello</h1>
+     </div>
+     <!--Show and Hide using hidden property :it is recommended-->
+     <div [hidden]="isHidden">
+        <h1>Hai</h1>
+     </div>
+     <button class="btn btn-success" (click)="toogleEnabled()">Toggle:Ifelse</button>
 
+eg:
+products-view.component.html
+<!-- <p>{{product | json}}</p> -->
+<h3>Id {{product.id}}</h3>
+<p class="lead" style="color:rgb(242, 7, 7)"> Category : {{product.category | titlecase}}</p>
+<h2>{{product.title | uppercase}}</h2>
+<button class="btn btn-warning" (click)="showProduct(product)">View</button>
+<div *ngIf="selectedProduct" [hidden]="isHidden">
+    <p>Price(USD) {{selectedProduct.price | currency}} - Price(INR) {{selectedProduct.price | currency:'INR'}} </p>
+    <app-product-image [productImage]="selectedProduct"></app-product-image>
+    <p class="badge text-bg-secondary">Rating {{selectedProduct.rating?.rate}}</p>
+</div>
+import { Component, Input } from '@angular/core';
+import { Product } from './product.type';
+
+@Component({
+  selector: 'app-products-view',
+  templateUrl: './products-view.component.html',
+  styleUrls: ['./products-view.component.css']
+})
+export class ProductsViewComponent {
+  @Input()
+  product!: Product
+  isHidden:boolean =true 
+
+  selectedProduct!: Product
+
+  showProduct(tmpProduct: Product) {
+    console.log(tmpProduct)
+    this.isHidden = !this.isHidden
+    this.selectedProduct = tmpProduct
+  }
+}
+....................................................................................
+	Progress bar implementation using *ngIF...else block
+
+import { Component } from '@angular/core';
+import { ProductsService } from './products.service';
+import { Product } from './product.type';
+import { Observable } from 'rxjs';
+
+@Component({
+  selector: 'app-products',
+  templateUrl: './products.component.html',
+  styles: [`
+    h3 {
+      color:red;
+    }
+  `]
+})
+export class ProductsComponent {
+  today: Date = new Date()
+  products!: Observable<Product[]>
+  status: string = 'Loading....'
+  loading: boolean = true;
+
+  constructor(private productService: ProductsService) { }
+
+  ngOnInit() {
+    //just simulted code to show loading status
+    // todo: remove after testing
+    setTimeout(() => {
+      this.products = this.productService.findAll()
+      this.loading = !this.loading
+    },5000)
+  }
+}
 

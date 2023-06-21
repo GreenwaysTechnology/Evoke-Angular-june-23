@@ -1,0 +1,29 @@
+<div>
+    <button (click)="onClick()">Click</button>
+</div>
+<hr/>
+<div>
+    {{greet}}
+    <button (click)="updateGreet('Hello How are you?')">Update</button>
+</div>
+<hr/>
+<div>
+    <h1>Name : {{name}}</h1>
+    <input (input)="onRead($event)"/>
+</div>
+<div>
+    <h1>Attribute Binding</h1>
+    <!-- static image -->
+    <img src="favicon.ico"/>
+    <img [src]="myLogo"/>
+    <hr/>
+    <div [hidden]="isHidden">
+        <h1>Hey I am hidden or shown</h1>
+    </div>
+    <button (click)="showOrHide()">Show/Hide</button>
+</div>
+<div>
+    <h1>City : {{city}}</h1>
+    <!-- <input (input)="city=$event.target.value" [value]="city"/> -->
+    <input [(ngModel)]="city"/>
+</div>
