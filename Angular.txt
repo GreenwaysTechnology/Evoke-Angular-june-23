@@ -2676,6 +2676,147 @@ const routes: Routes = [
   }
 
 ];
+....................................................................................
+			 Lazy loading
+
+  { path: 'products', loadChildren: () => import('./products/products.module').then(m => m.ProductsModule) }
+
+path:'products' - url pattern
+
+loadChildren:()=> { 
+   import('').then(m=>m.ProductModule)
+}
+
+loadChildren will link sub routing module with main routing module
+
+
+import { HelloComponent } from "./greeter/hello.component"; =>static import
+
+import('./products/products.module').then(m=>m.ProductModule) =>dynamic import
+...................................................................................
+
+Flow of spa:
+
+ http://www.example.com
+         -------------------------->Server (server has app) - collection of js files
+				    bundle.js
+
+Generally the whole is packed as single "bundle.js"
+
+ Server---->will send bundle.js ------>browser---browser will initalize and lanuch app.
+
+What could be size of the bundle?
+  it may vary based on your app size
+
+every app has menus,each menu associated with some js files.
+
+when we request the web site first time, the server will send whole app as single bundle whether we are going to click the link or not.
+
+when we load the single bundle which size might be bigger,now browser will take so much time to load the js file.
+
+now we need to optimize the loading performance.... instead of sending single large bundle , we can break into smaller and smaller which is called chunks
+
+How to break app into smaller bundle?
+
+  "Based on menu"/route
+
+lazy loading ; 
+   load js on demand
+  import('./products/products.module').then(m=>m.ProductModule)
+
+
+How to create a submodule with sub routing module?
+
+ng g m customers --route customers  --module=app
+
+CREATE src/app/customers/customers-routing.module.ts (355 bytes)
+CREATE src/app/customers/customers.module.ts (378 bytes)
+CREATE src/app/customers/customers.component.html (24 bytes)
+CREATE src/app/customers/customers.component.spec.ts (620 bytes)
+CREATE src/app/customers/customers.component.ts (287 bytes)
+CREATE src/app/customers/customers.component.css (0 bytes)
+UPDATE src/app/app-routing.module.ts (1707 bytes)          
+
+ng g m orders --route orders  --module app.module
+CREATE src/app/orders/orders-routing.module.ts (343 bytes)
+CREATE src/app/orders/orders.module.ts (357 bytes)
+CREATE src/app/orders/orders.component.html (21 bytes)
+CREATE src/app/orders/orders.component.spec.ts (599 bytes)
+CREATE src/app/orders/orders.component.ts (275 bytes)
+CREATE src/app/orders/orders.component.css (0 bytes)
+UPDATE src/app/app-routing.module.ts (1809 bytes)
+
+eg:
+products.module.ts
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ProductsRoutingModule } from './products-routing.module';
+import { ProductsComponent } from './products.component';
+import { ProductsDetailsComponent } from './products-details.component';
+import { ProductsViewComponent } from './products-view.component';
+import { ProductImageComponent } from './product-image.component'
+import { FormsModule } from '@angular/forms'
+
+
+@NgModule({
+  declarations: [
+    ProductsComponent,
+    ProductsDetailsComponent,
+    ProductsViewComponent,
+    ProductImageComponent
+  ],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ProductsRoutingModule
+  ],
+  exports: [ProductsComponent, ProductsDetailsComponent, ProductsViewComponent, ProductImageComponent]})
+export class ProductsModule { }
+
+products.routing.module.ts
+
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { ProductsComponent } from './products.component';
+
+const routes: Routes = [{ path: '', component: ProductsComponent }];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
+})
+export class ProductsRoutingModule { }
+
+app.module.ts
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { GreeterModule } from './greeter/greeter.module';
+import { UtilModule } from './util/util.module';
+import { HttpClientModule } from '@angular/common/http';
+
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    GreeterModule,
+    UtilModule,
+    HttpClientModule,
+
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+Note: 
+ The products components,services please refer code.
+
+
 
 
 

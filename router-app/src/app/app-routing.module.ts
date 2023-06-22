@@ -34,10 +34,13 @@ const routes: Routes = [
   {
     path: 'welcome', component: WelcomeComponent
   },
+  { path: 'products', loadChildren: () => import('./products/products.module').then(m => m.ProductsModule) },
+  { path: 'customers', loadChildren: () => import('./customers/customers.module').then(m => m.CustomersModule) },
+  { path: 'products', loadChildren: () => import('./products/products.module').then(m => m.ProductsModule) },
 
   //page not found
   {
-    path:'**',component:PagenotfoundComponent
+    path: '**', component: PagenotfoundComponent
   }
 ]
 
