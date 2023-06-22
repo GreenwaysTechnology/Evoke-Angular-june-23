@@ -2411,5 +2411,285 @@ export class UsersService {
   }
 
 }
+....................................................................................
+			   Routing
+....................................................................................
+				 Routing
+....................................................................................
+
+Routing is a concept through which we can build an app called Single Page Web App.
+
+We have lot of web apps
+
+1.static web app
+2.dynamic web app
+3.web services - soap,restfull
+4.spa
+
+SPA core concepts:
+
+spa is built using "js,css,html5"
+
+js offers browser apis
+-location
+-history
+ objects are used to implement navigation
+
+if you want to build spa using frameworks like angular , angular offers a separate module called "RouterModule"
+
+1.page
+  1.physical page - html page/static - index.html
+  2.virtual page - the page created onfly and inserted into pysical page- 
+
+components/views
+
+index.html
+
+ <body>
+    <app-root></app-root>
+ </body>
+
+
+without spa
+
+ <body>
+    <app-root>
+		<app-users>
+    </app-root>
+ </body>
+
+
+
+with spa
+
+ <body>
+    <app-root>
+         <navigation>
+         <page>
+    </app-root>
+ </body>
+
+navigation would html hyper links - menus
+page is component to be rendered based on menuitem
+.....................................................................................
+
+Steps:
+
+1.RouterModule:
+ 
+Routing Design:
+
+1.Global /Application Level Routing
+  appRouting
+2.Module Level Routing
+
+
+app.routing.module.ts
+
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+
+//routing rules: routing configuration/
+//when i click particular menu, which compoent should be displayed
+const routes: Routes = [];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
+
+....................................................................................
+Common Objects In the Routing Module/Routing:
+
+1.RouterModule
+  To define route configuration
+
+Directives:
+2.RouterOutlet 
+	Acts as a placeholder that Angular dynamically fills based on the current router state.
+   <router-outlet>
+
+3.RouterLink And RouterLinkActive
+   RouterLink is directive to replace href .
+
+Flow of App:
+
+Modules:
+
+routingapp>ng g m home --module=app
+CREATE src/app/home/home.module.ts (190 bytes)
+UPDATE src/app/app.module.ts (458 bytes)
+
+E:\session\IBM\2022\sep\ng-session\routingapp>ng g m contact --module=app
+CREATE src/app/contact/contact.module.ts (193 bytes)
+UPDATE src/app/app.module.ts (535 bytes)
+
+Components:
+E:\session\IBM\2022\sep\ng-session\routingapp>ng g c home/home --flat --inline-style --export  --module=home --skip-tests
+CREATE src/app/home/home.component.html (19 bytes)
+CREATE src/app/home/home.component.ts (245 bytes)
+UPDATE src/app/home/home.module.ts (297 bytes)
+
+E:\session\IBM\2022\sep\ng-session\routingapp>ng g c contact/contact --flat --inline-style --export  --module=contact --skip-tests
+CREATE src/app/contact/contact.component.html (22 bytes)
+CREATE src/app/contact/contact.component.ts (254 bytes)
+UPDATE src/app/contact/contact.module.ts (312 bytes) 
+
+
+Rendering:
+<div class="container">
+    <h1 class="text-center">Routing App</h1>
+    <hr>
+    <app-home></app-home>
+    <app-contact></app-contact>
+ 
+</div>
+..................................................................................
+			  How to display view based on navigation.
+
+
+Routing Configuration:
+ -AppModule level
+ -SubModule level
+
+
+app.routing.module.ts
+
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { ContactComponent } from './contact/contact.component';
+import { HomeComponent } from './home/home.component';
+
+//routing rules: routing configuration/
+//when i click particular menu, which compoent should be displayed
+const routes: Routes = [
+  {
+    path: '', component: HomeComponent
+  },
+  {
+    path: 'contact', component: ContactComponent
+  }
+
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
+
+........................................................................
+
+More Menu Configuration:
+<div class="container">
+    <h1 class="text-center">Routing App</h1>
+    <hr>
+    <!-- Traditionally displayed -->
+    <!-- <app-home></app-home>
+    <app-contact></app-contact> -->
+    <!-- With routing -->
+    <nav>
+        <ul>
+            <li><a routerLinkActive="active" routerLink="contact">Contact</a></li>
+            <li><a routerLinkActive="active" routerLink="users">Users</a></li>
+        </ul>
+    </nav>
+    <hr>
+    <router-outlet></router-outlet>
+
+</div>
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { ContactComponent } from './contact/contact.component';
+import { HomeComponent } from './home/home.component';
+import { UserlistComponent } from './users/userlist.component';
+
+//routing rules: routing configuration/
+//when i click particular menu, which compoent should be displayed
+const routes: Routes = [
+  {
+    path: '', component: HomeComponent
+  },
+  {
+    path: 'contact', component: ContactComponent
+  },
+  {
+    path: 'users', component: UserlistComponent
+  }
+
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
+....................................................................................
+			  Page Not Found - 404
+..................................................................................
+E:\session\IBM\2022\sep\ng-session\routingapp>ng g c pagenotfound --flat --inline-style --export  --module=app --skip-tests
+CREATE src/app/pagenotfound.component.html (27 bytes)
+CREATE src/app/pagenotfound.component.ts (269 bytes)
+UPDATE src/app/app.module.ts (741 bytes)
+
+
+ {
+    path: '**', component: PagenotfoundComponent
+  }
+....................................................................................
+			Redirection
+...................................................................................
+
+For multi url pattern we can map single component
+
+eg/
+ Component: MyComponent
+
+/foo - MyComponent
+/bar->MyComponent
+/ -->MyComponent
+
+{path: 'mycmp' component:MyComponent}
+
+{path :'/foo' redirect:'/mycmp' pathMatch:'full'}
+
+
+const routes: Routes = [
+  {
+    path: 'home', component: HomeComponent
+  },
+  {
+    path: 'contact', component: ContactComponent
+  },
+  {
+    path: 'users', component: UserlistComponent
+  },
+  {
+    path: '', redirectTo: '/home', pathMatch: 'full'
+  },
+  {
+    path: 'yourhome', redirectTo: '/home', pathMatch: 'full'
+  },
+  {
+    path: '**', component: PagenotfoundComponent
+  }
+
+];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
