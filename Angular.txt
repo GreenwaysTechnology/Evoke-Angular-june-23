@@ -2815,7 +2815,145 @@ export class AppModule { }
 
 Note: 
  The products components,services please refer code.
+.....................................................................................
+			Master-details- Dynamic routing -Route params
 
+
+/users/1
+
+  {
+    path: 'users/:id', component: UserlistComponent
+  },
+
+http://localhost:4200/users/12
+
+E:\session\IBM\2022\sep\ng-session\routingapp>ng g c users/user --flat --inline-style --export  --module=users --skip-tests
+CREATE src/app/users/user.component.html (19 bytes)
+CREATE src/app/users/user.component.ts (245 bytes)
+UPDATE src/app/users/users.module.ts (402 bytes)
+
+How to read routeParam inside component?
+
+ActivatedRoute:
+ It is built in service object , used to get information about current route inside component.
+This Object powered with Observable.
+
+
+http://localhost:4200/users/89
+
+eg;
+
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+
+@Component({
+  selector: 'app-user',
+  templateUrl: './user.component.html',
+  styles: [
+  ]
+})
+export class UserComponent implements OnInit {
+
+  id!: string
+  constructor(private route: ActivatedRoute) { }
+
+  ngOnInit(): void {
+    this.route.params.subscribe({
+      next: params => {
+        console.log(params['id'])
+        this.id = params['id']
+      }
+    })
+  }
+
+}
+
+eg:
+
+import { Injectable } from "@angular/core";
+import { CUSTOMERS } from "./mock-customers";
+import { Customer } from "./customer.type";
+
+
+@Injectable({ providedIn: 'root' })
+export class CustomerService {
+
+    findAll(): Array<Customer> {
+        return CUSTOMERS
+    }
+    findById(){
+        
+    }
+}
+import { Component } from '@angular/core';
+import { CustomerService } from './customer.service';
+import { Customer } from './customer.type';
+
+@Component({
+  selector: 'app-customers',
+  templateUrl: './customers.component.html',
+  styleUrls: ['./customers.component.css']
+})
+export class CustomersComponent {
+  customers!: Customer[]
+  constructor(private customerService: CustomerService) { }
+  ngOnInit() {
+    this.customers = this.customerService.findAll()
+  }
+}
+
+<div>
+    <h2>Customers</h2>
+    <ul>
+        <li *ngFor="let customer of customers">
+            <a [routerLink]="['customer',customer.id]">
+                <span>{{customer.name}}</span>
+            </a>
+        </li>
+    </ul>
+</div>
+
+...
+import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+
+@Component({
+  selector: 'app-customerdetails',
+  templateUrl: './customerdetails.component.html',
+  styles: [
+  ]
+})
+export class CustomerdetailsComponent {
+  id!: string
+  constructor(private route: ActivatedRoute) { }
+  ngOnInit(): void {
+    this.route.params.subscribe({
+      next: params => {
+        this.id = params['id']
+      }
+    })
+  }
+}
+
+<h2>
+    {{id}} - details
+</h2>
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { CustomersComponent } from './customers.component';
+import { CustomerdetailsComponent } from './customerdetails.component';
+
+
+const routes: Routes = [
+  { path: '', component: CustomersComponent },
+  { path: 'customer/:id', component: CustomerdetailsComponent }
+];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
+})
+export class CustomersRoutingModule { }
 
 
 
