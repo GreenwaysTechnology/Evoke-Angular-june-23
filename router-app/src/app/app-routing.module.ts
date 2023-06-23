@@ -3,6 +3,9 @@ import { RouterModule, Routes } from "@angular/router";
 import { HelloComponent } from "./greeter/hello.component";
 import { WelcomeComponent } from "./greeter/welcome.component";
 import { PagenotfoundComponent } from "./util/pagenotfound.component";
+import { CategoryComponent } from "./category/category.component";
+import { BooksComponent } from "./category/books.component";
+import { ElectronicsComponent } from "./category/electronics.component";
 
 /**
  * Routing order
@@ -33,6 +36,14 @@ const routes: Routes = [
   },
   {
     path: 'welcome', component: WelcomeComponent
+  },
+  {
+    path: 'category', component: CategoryComponent,
+    children: [
+      { path: '', pathMatch: 'full', redirectTo: 'books' },
+      { path: 'books', component: BooksComponent },
+      { path: 'electronics', component: ElectronicsComponent },
+    ]
   },
   { path: 'products', loadChildren: () => import('./products/products.module').then(m => m.ProductsModule) },
   { path: 'customers', loadChildren: () => import('./customers/customers.module').then(m => m.CustomersModule) },

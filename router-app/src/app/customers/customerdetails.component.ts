@@ -14,6 +14,7 @@ export class CustomerdetailsComponent {
     this.route.params.subscribe({
       next: params => {
         this.id = params['id']
+        //api call to get that particular comment
       }
     })
   }

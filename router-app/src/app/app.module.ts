@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { GreeterModule } from './greeter/greeter.module';
 import { UtilModule } from './util/util.module';
 import { HttpClientModule } from '@angular/common/http';
+import { CategoryModule } from './category/category.module';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { HttpClientModule } from '@angular/common/http';
     GreeterModule,
     UtilModule,
     HttpClientModule,
+    CategoryModule,
 
   ],
   providers: [],
