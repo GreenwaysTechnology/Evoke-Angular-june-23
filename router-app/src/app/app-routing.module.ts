@@ -7,6 +7,8 @@ import { CategoryComponent } from "./category/category.component";
 import { BooksComponent } from "./category/books.component";
 import { ElectronicsComponent } from "./category/electronics.component";
 import { DashboardComponent } from "./dashboard/dashboard.component";
+import { RegistrationComponent } from "./registration/registration.component";
+import { RegistrationsuccessComponent } from "./registration/registrationsuccess.component";
 
 /**
  * Routing order
@@ -33,10 +35,16 @@ const routes: Routes = [
     path: 'how', pathMatch: 'full', redirectTo: 'welcome'
   },
   {
-    path: 'hello', component: HelloComponent
+    path: 'hello', component: HelloComponent,
   },
   {
     path: 'welcome', component: WelcomeComponent
+  },
+  {
+    path:'registrationsuccess' ,component:RegistrationsuccessComponent
+  },
+  {
+    path: 'registration', component: RegistrationComponent
   },
   {
     path: 'category', component: CategoryComponent,
@@ -47,7 +55,7 @@ const routes: Routes = [
     ]
   },
   {
-    path:'dashboard',component:DashboardComponent
+    path: 'dashboard', component: DashboardComponent
   },
   { path: 'products', loadChildren: () => import('./products/products.module').then(m => m.ProductsModule) },
   { path: 'customers', loadChildren: () => import('./customers/customers.module').then(m => m.CustomersModule) },

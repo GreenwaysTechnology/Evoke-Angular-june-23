@@ -7,6 +7,7 @@ import { UtilModule } from './util/util.module';
 import { HttpClientModule } from '@angular/common/http';
 import { CategoryModule } from './category/category.module';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { RegistrationModule } from './registration/registration.module';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
     HttpClientModule,
     CategoryModule,
     DashboardModule,
+    RegistrationModule,
 
   ],
   providers: [],
