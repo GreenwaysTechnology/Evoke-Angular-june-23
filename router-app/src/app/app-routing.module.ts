@@ -6,6 +6,7 @@ import { PagenotfoundComponent } from "./util/pagenotfound.component";
 import { CategoryComponent } from "./category/category.component";
 import { BooksComponent } from "./category/books.component";
 import { ElectronicsComponent } from "./category/electronics.component";
+import { DashboardComponent } from "./dashboard/dashboard.component";
 
 /**
  * Routing order
@@ -44,6 +45,9 @@ const routes: Routes = [
       { path: 'books', component: BooksComponent },
       { path: 'electronics', component: ElectronicsComponent },
     ]
+  },
+  {
+    path:'dashboard',component:DashboardComponent
   },
   { path: 'products', loadChildren: () => import('./products/products.module').then(m => m.ProductsModule) },
   { path: 'customers', loadChildren: () => import('./customers/customers.module').then(m => m.CustomersModule) },

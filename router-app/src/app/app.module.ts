@@ -6,6 +6,7 @@ import { GreeterModule } from './greeter/greeter.module';
 import { UtilModule } from './util/util.module';
 import { HttpClientModule } from '@angular/common/http';
 import { CategoryModule } from './category/category.module';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { CategoryModule } from './category/category.module';
     UtilModule,
     HttpClientModule,
     CategoryModule,
+    DashboardModule,
 
   ],
   providers: [],
